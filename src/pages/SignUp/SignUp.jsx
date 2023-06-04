@@ -5,6 +5,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { FcGoogle } from "react-icons/fc";
 import { CgSpinner } from "react-icons/cg";
 import { AuthContext } from "../../providers/AuthProvider";
+import { saveUser } from "../../api/auth";
 
 const SignUp = () => {
   const {
@@ -23,6 +24,9 @@ const SignUp = () => {
     signInWithGoogle()
       .then((result) => {
         const user = result.user;
+        // save user to db
+        saveUser(user);
+        // ---------------
         console.log(user);
         navigate(from, { replace: true });
       })
@@ -55,10 +59,13 @@ const SignUp = () => {
         const imageUrl = imageData.data.display_url;
         console.log(imageData.data.display_url);
         createUser(email, password)
-          .then(() => {
+          .then((result) => {
             updateUserProfile(name, imageUrl)
               .then(() => {
                 toast.success("SIgn UP Successfully");
+                // save user to db
+                saveUser(result.user)
+                // ------------------
                 navigate(from, { replace: true });
               })
               .catch((error) => {

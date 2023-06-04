@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { FcGoogle } from "react-icons/fc";
 import { CgSpinner } from "react-icons/cg";
 import { AuthContext } from "../../providers/AuthProvider";
+import { saveUser } from "../../api/auth";
 
 const Login = () => {
   const { loading, setLoading, signIn, signInWithGoogle, resetPassword } =
@@ -19,6 +20,9 @@ const Login = () => {
         .then(result => {
             const user = result.user;
             console.log(user);
+            // save user to db
+            saveUser(user)
+            // --------------
             navigate(from, {replace: true})
         })
         .catch(error => {
@@ -37,6 +41,9 @@ const Login = () => {
         .then(result => {
             const user = result.user;
             console.log(user);
+            // save user to db
+            saveUser(user)
+            // --------------
             navigate(from, {replace: true})
         })
         .catch(error => {
