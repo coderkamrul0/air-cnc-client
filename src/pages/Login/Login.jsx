@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import { FcGoogle } from "react-icons/fc";
@@ -9,6 +9,7 @@ const Login = () => {
   const { loading, setLoading, signIn, signInWithGoogle, resetPassword } =
     useContext(AuthContext);
     const navigate = useNavigate();
+    const emailRef = useRef()
 
     // Google signIn
     const handleGoogleSignIn = () => {
@@ -42,7 +43,24 @@ const Login = () => {
             setLoading(false)
         })
     }
-        // reset password
+
+
+    // reset password
+    const handleReset = () => {
+        const email = emailRef.current.value;
+        resetPassword(email)
+        .then(() => {
+            toast.success('Please check your email for reset link!')
+            setLoading(false)
+        })
+        .catch(error => {
+            toast.error(error.message)
+            console.log(error);
+            setLoading(false)
+        })
+
+        
+    }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -69,6 +87,7 @@ const Login = () => {
                 name="email"
                 id="email"
                 required
+                ref={emailRef}
                 placeholder="Enter Your Email Here"
                 className="w-full px-3 py-2 border rounded-md border-gray-300 focus:outline-rose-500 bg-gray-200 text-gray-900"
                 data-temp-mail-org="0"
@@ -100,7 +119,7 @@ const Login = () => {
           </div>
         </form>
         <div className="space-y-1">
-          <button className="text-xs hover:underline hover:text-rose-500 text-gray-400">
+          <button onClick={handleReset} className="text-xs hover:underline hover:text-rose-500 text-gray-400">
             Forgot password?
           </button>
         </div>
