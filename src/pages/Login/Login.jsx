@@ -25,6 +25,25 @@ const Login = () => {
         })
     }
 
+    // Sign In
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        const email = event.target.email.value;
+        const password = event.target.password.value;
+        signIn(email,password)
+        .then(result => {
+            const user = result.user;
+            console.log(user);
+            navigate('/')
+        })
+        .catch(error => {
+            toast.error(error.message)
+            console.log(error);
+            setLoading(false)
+        })
+    }
+        // reset password
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-100 text-gray-900">
@@ -35,6 +54,7 @@ const Login = () => {
           </p>
         </div>
         <form
+        onSubmit={handleSubmit}
           noValidate=""
           action=""
           className="space-y-6 ng-untouched ng-pristine ng-valid"
