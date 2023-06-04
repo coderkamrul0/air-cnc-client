@@ -1,7 +1,10 @@
+import React from "react"
+import NavBar from "../components/Shared/NavBar/NavBar"
+
 const Main = () => {
   return (
     <div>
-      <h1>Welcome TO AirCNC</h1>
+      <NavBar/>
     </div>
   )
 }
