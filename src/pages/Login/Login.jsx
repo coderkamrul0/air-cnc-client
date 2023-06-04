@@ -1,5 +1,5 @@
 import React, { useContext, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import { FcGoogle } from "react-icons/fc";
 import { CgSpinner } from "react-icons/cg";
@@ -9,6 +9,8 @@ const Login = () => {
   const { loading, setLoading, signIn, signInWithGoogle, resetPassword } =
     useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation()
+    const from = location.state?.from?.pathname || '/'
     const emailRef = useRef()
 
     // Google signIn
@@ -17,7 +19,7 @@ const Login = () => {
         .then(result => {
             const user = result.user;
             console.log(user);
-            navigate('/')
+            navigate(from, {replace: true})
         })
         .catch(error => {
             toast.error(error.message)
@@ -35,7 +37,7 @@ const Login = () => {
         .then(result => {
             const user = result.user;
             console.log(user);
-            navigate('/')
+            navigate(from, {replace: true})
         })
         .catch(error => {
             toast.error(error.message)
