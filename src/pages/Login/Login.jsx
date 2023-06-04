@@ -1,11 +1,29 @@
-import React from "react";
-
-import { Link } from "react-router-dom";
-
+import React, { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import toast, { Toaster } from 'react-hot-toast';
 import { FcGoogle } from "react-icons/fc";
+import { CgSpinner } from "react-icons/cg";
+import { AuthContext } from "../../providers/AuthProvider";
 
 const Login = () => {
+  const { loading, setLoading, signIn, signInWithGoogle, resetPassword } =
+    useContext(AuthContext);
+    const navigate = useNavigate();
 
+    // Google signIn
+    const handleGoogleSignIn = () => {
+        signInWithGoogle()
+        .then(result => {
+            const user = result.user;
+            console.log(user);
+            navigate('/')
+        })
+        .catch(error => {
+            toast.error(error.message)
+            console.log(error);
+            setLoading(false)
+        })
+    }
 
   return (
     <div className="flex justify-center items-center min-h-screen">
@@ -26,7 +44,7 @@ const Login = () => {
               <label htmlFor="email" className="block mb-2 text-sm">
                 Email address
               </label>
-              <input 
+              <input
                 type="email"
                 name="email"
                 id="email"
@@ -57,8 +75,7 @@ const Login = () => {
             <button
               type="submit"
               className="bg-rose-500 w-full rounded-md py-3 text-white"
-            >
-              Continue
+            >{loading ? <CgSpinner className="mx-auto animate-spin" size={24}/> : 'Continue'}
             </button>
           </div>
         </form>
@@ -74,7 +91,7 @@ const Login = () => {
           </p>
           <div className="flex-1 h-px sm:w-16 dark:bg-gray-700"></div>
         </div>
-        <div className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer">
+        <div onClick={handleGoogleSignIn} className="flex justify-center items-center space-x-2 border m-3 p-2 border-gray-300 border-rounded cursor-pointer">
           <FcGoogle size={32} />
 
           <p>Continue with Google</p>
@@ -90,6 +107,7 @@ const Login = () => {
           .
         </p>
       </div>
+      <Toaster />
     </div>
   );
 };
